@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+@import "tailwindcss/index.css";
+
+@theme {
+  --color-primary: #2563eb;
+  --color-secondary: #059669;
+  --color-accent: #7c3aed;
+
+  --color-neutral-900: #1f2937;
+  --color-neutral-600: #6b7280;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-50: #f9fafb;
+
+  --color-alert: #dc2626;
+  --color-saffron: #ff9933;
+  --color-india-green: #138808;
+
+  --font-display: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --animate-fade-in-up: fade-in-up 0.5s ease-out;
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@utility glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-display);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
