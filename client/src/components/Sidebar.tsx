@@ -97,20 +97,6 @@ export default function Sidebar(): React.ReactNode {
           </span>
         </Link>
 
-        <Link
-          href="/history"
-          className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors group ${
-            pathname.includes("/logs")
-              ? "bg-primary/10 text-primary"
-              : "text-[#6e6189] hover:bg-[#f1f0f4] hover:text-[#131118]"
-          }`}
-        >
-          <History
-            className={`size-6 transition-transform ${!pathname.includes("/logs") && "group-hover:scale-110"}`}
-          />
-          <span className="font-medium text-sm">History</span>
-        </Link>
-
         <div className="mt-auto pt-4 border-t border-[#f1f0f4]">
           <a className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#6e6189] hover:bg-[#f1f0f4] hover:text-[#131118] transition-colors cursor-pointer">
             <HelpCircle className="size-6" />

@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { Vote, ShieldCheck, CheckCircle } from "lucide-react";
+import Link from "next/link";
+import { Vote, ShieldCheck, CheckCircle, UserCog } from "lucide-react";
 
 export default function Home() {
   return (
@@ -142,6 +143,14 @@ export default function Home() {
         <p className="mt-4 text-[9px] text-white/60 font-medium">
           © 2024 Loktantra Foundation. All rights reserved.
         </p>
+
+        <Link
+          href="/admin/login"
+          className="mt-3 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-white/20 bg-white/5 backdrop-blur-sm text-xs text-white/70 font-semibold hover:bg-white/10 hover:text-white hover:border-white/30 transition-all"
+        >
+          <UserCog className="size-4" />
+          <span>Sign in as Admin</span>
+        </Link>
       </div>
     </div>
   );
