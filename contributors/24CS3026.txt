@@ -1,0 +1,5 @@
+Name: YOGESH M
+Roll No: 24CS3026
+Branch: CSE
+GitHub: https://github.com/yogesh4216
+About: Computer Science–focused student passionate about AI, software development, and building impactful real-world projects.

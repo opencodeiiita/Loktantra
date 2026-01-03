@@ -1,0 +1,5 @@
+Name: Harshit Sethi
+Roll No: IIT2025003
+Branch: IT
+GitHub: https://github.com/HarshitRSethi
+About: I'm a first-year IT undergrad at IIIT Allahabad, passionate about learning programming, data analysis, and exploring the world of AI.

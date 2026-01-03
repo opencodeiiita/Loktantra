@@ -1,0 +1,5 @@
+Name: Chithra R
+Roll No: 24CS0160
+Branch: CSE (Computer Science and Engineering)
+GitHub: https://github.com/Chithra582
+About: A passionate CSE student exploring open source, web development, and collaborative technologies.

@@ -1,0 +1,5 @@
+Name: Deepali Kumari
+Roll No: 24A12RES222
+Branch: B.Sc. Computer Science & Data Analytics
+GitHub: https://github.com/deepali-kumari-iitp
+About: A passionate learner interested in open source, web development, and building impactful solutions.
