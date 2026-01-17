@@ -3,7 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
+
+const MOCK_WALLET_ADDRESS = "0xAbC1234567890DefABC1234567890dEfABC1234";
+const ETHERSCAN_BASE = process.env.NEXT_PUBLIC_ETHERSCAN_BASE;
+
 export default function Dashboard() {
+
   const [hasVoted, setHasVoted] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
@@ -12,6 +17,7 @@ export default function Dashboard() {
     setSelectedCandidate(candidate);
     setShowConfirmPopup(true);
   };
+  
 
   const confirmVote = () => {
     setHasVoted(true);
@@ -40,14 +46,35 @@ export default function Dashboard() {
               <h1 className="text-2xl font-bold text-gray-800 mr-3">2025 Election is Live</h1>
               <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full font-medium">Live</span>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-6">
+              {/* Wallet Info */}
+              <div className="text-right">
+                <p className="text-xs text-gray-500">Connected Wallet</p>
+                <p className="text-sm font-mono text-gray-800">
+                  {MOCK_WALLET_ADDRESS.slice(0, 6)}...{MOCK_WALLET_ADDRESS.slice(-4)}
+                </p>
+                <a
+                  href={`${ETHERSCAN_BASE}/address/${MOCK_WALLET_ADDRESS}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  View on Etherscan
+                </a>
+              </div>
+
               <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 <i className="fas fa-bell text-black text-lg"></i>
               </button>
-              <button onClick={() => router.push('/')} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+
+              <button
+                onClick={() => router.push('/')}
+                className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              >
                 <i className="fas fa-sign-out-alt text-black text-lg"></i>
               </button>
             </div>
+
           </div>
         </header>
 

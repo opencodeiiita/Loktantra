@@ -9,5 +9,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
 }
