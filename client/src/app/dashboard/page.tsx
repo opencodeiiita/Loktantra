@@ -3,13 +3,19 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
+import { BrowserProvider, Contract } from "ethers";
+import CONTRACT_ABI from "@/contracts/Loktantra.json";
 
 const MOCK_WALLET_ADDRESS = "0xAbC1234567890DefABC1234567890dEfABC1234";
 const ETHERSCAN_BASE = process.env.NEXT_PUBLIC_ETHERSCAN_BASE;
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as string;
 
 export default function Dashboard() {
 
   const [hasVoted, setHasVoted] = useState(false);
+  const [txHash, setTxHash] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
@@ -19,11 +25,42 @@ export default function Dashboard() {
   };
   
 
-  const confirmVote = () => {
-    setHasVoted(true);
-    setShowConfirmPopup(false);
-    setSelectedCandidate(null);
+  const confirmVote = async () => {
+    if (!selectedCandidate || loading) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      if (!window.ethereum) {
+        throw new Error("MetaMask not found");
+      }
+
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      const contract = new Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI.abi,
+        signer
+      );
+
+      const tx = await contract.vote(selectedCandidate.id);
+      setTxHash(tx.hash);
+
+      await tx.wait();
+
+      setHasVoted(true);
+      setShowConfirmPopup(false);
+      setSelectedCandidate(null);
+    } catch (err: any) {
+      console.error("Vote failed:", err);
+      setError(err?.reason || err?.shortMessage || err?.message || "Transaction failed");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   const cancelVote = () => {
     setShowConfirmPopup(false);
@@ -259,7 +296,20 @@ export default function Dashboard() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-600">Transaction Hash:</span>
-                    <span className="text-xs font-medium text-gray-800">0x7f8e...2d1c</span>
+                    {txHash && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-600">Transaction:</span>
+                      <a
+                        href={`${ETHERSCAN_BASE}/tx/${txHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:underline"
+                      >
+                        View on Etherscan
+                      </a>
+                    </div>
+                  )}
+
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-600">Block Number:</span>
@@ -284,12 +334,21 @@ export default function Dashboard() {
                 >
                   Cancel
                 </button>
+                {error && (
+                  <p className="text-xs text-red-600 text-center mb-2">
+                    ❌ {error}
+                  </p>
+                )}
+
                 <button
                   onClick={confirmVote}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm"
+                  disabled={loading}
+                  className={`flex-1 px-4 py-2 rounded-lg font-medium text-sm text-white
+                    ${loading ? "bg-yellow-500" : "bg-blue-600 hover:bg-blue-700"}`}
                 >
-                  Confirm Vote
+                  {loading ? "Transaction Pending..." : "Confirm Vote"}
                 </button>
+
               </div>
             </div>
           </div>
