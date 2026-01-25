@@ -18,6 +18,7 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [candidates, setCandidates] = useState<any[]>([]);
   const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
 
   useEffect(() => {
@@ -31,7 +32,44 @@ export default function Dashboard() {
     };
 
     loadWallet();
+    loadCandidates();
   }, []);
+
+  const loadCandidates = async () => {
+    try {
+      if (!window.ethereum) return;
+
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      const contract = new Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI.abi,
+        signer
+      );
+
+      const count = await contract.candidatesCount();
+      console.log("Candidates count:", Number(count));
+
+      const loaded = [];
+
+      for (let i = 1; i <= Number(count); i++) {
+        const data = await contract.getCandidate(i);
+
+        loaded.push({
+          id: Number(data[0]),
+          name: data[1],
+          votes: Number(data[2])
+        });
+      }
+
+      setCandidates(loaded);
+
+    } catch (err) {
+      console.error("Failed to load candidates:", err);
+    }
+  };
+
 
   const handleVote = (candidate: any) => {
     setSelectedCandidate(candidate);
@@ -189,17 +227,8 @@ export default function Dashboard() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                  { id: 1, name: 'Rahul Sharma', party: 'Progressive Party', votes: 1234, image: 'rahulji.png' },
-                  { id: 2, name: 'Priya Patel', party: 'Green Future', votes: 987, image: 'rahulji.png' },
-                  { id: 3, name: 'Amit Kumar', party: 'Democratic Alliance', votes: 756, image: 'modiji.png' },
-                  { id: 4, name: 'Sneha Reddy', party: 'People First', votes: 543, image: 'rahulji.png' },
-                  { id: 5, name: 'Vikram Singh', party: 'Reform Party', votes: 432, image: 'modiji.png' },
-                  { id: 6, name: 'Anjali Gupta', party: 'National Unity', votes: 321, image: 'rahulji.png' }
-                ]
-                  .filter(candidate => 
-                    candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    candidate.party.toLowerCase().includes(searchTerm.toLowerCase())
+                {candidates
+                  .filter(candidate =>  candidate.name.toLowerCase().includes(searchTerm.toLowerCase())
                   )
                   .map((candidate) => (
                   <div key={candidate.id} className="bg-blue-50 border rounded-lg p-6 hover:shadow-md transition-shadow">
